@@ -1,3 +1,8 @@
+/* @file bintree.cpp
+@author Jeffrey Thompson and Lisa Peterman
+CSS 343 Lab 2
+*/
+
 #include "bintree.h"
 
 //-----------------------------------------------------------------------------
@@ -206,6 +211,29 @@ bool BinTree::retrieve(const NodeData toRetrieve, NodeData*& toSet) const {
 	}
 	return true;
 }
+
+/*
+//-----------------------------------------------------------------------------
+// getHeight
+// 
+int getHeight(const NodeData &) const{
+	
+}
+
+//-----------------------------------------------------------------------------
+// bstreeToArray
+// 
+void bstreeToArray(NodeData* []) {
+	
+}
+
+//-----------------------------------------------------------------------------
+// arrayToBSTree
+// 
+void arrayToBSTree(NodeData* []){
+	
+}
+*/
 
 //-----------------------------------------------------------------------------
 // isEmpty 
