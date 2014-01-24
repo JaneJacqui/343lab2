@@ -7,6 +7,7 @@
 #include "nodedata.h"
 
 using namespace std;
+
 //-----------------------------------------------------------------------------
 // Binary Search Tree: 
 //
@@ -14,7 +15,8 @@ using namespace std;
 //				-- 
 //
 // Assumptions:
-//	-- 
+//   - Arrays used when converting between array and tree format are built at
+//     a stratic length of 100 elements
 //-----------------------------------------------------------------------------
 
 
@@ -33,6 +35,9 @@ public:
 	bool operator!=(const BinTree &) const; 
 	bool insert(NodeData*); 
 	bool retrieve(const NodeData, NodeData*&) const; 
+	int getHeight(const NodeData &) const;
+	void bstreeToArray(NodeData* []); // fills an array of NodeData*
+	void arrayToBSTree(NodeData* []); // builds a balanced tree from a sorted array
 	void displaySideways() const; // provided, displays the tree sideways 
 //	ostream& dumpInorder(ostream&);
 
