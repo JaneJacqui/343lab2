@@ -43,10 +43,10 @@ int main() {
    cout << "Initial data:" << endl << "  ";
    buildTree(T, infile);              // builds and displays initial data
    cout << endl; 
-   BinTree first(T);                  // test copy constructor
-   dup = dup = T;                     // test operator=, self-assignment
-   while(!infile.eof()) {
-      cout << "Tree Inorder:" << endl << T;             // operator<< does endl
+//   BinTree first(T);                  // test copy constructor
+//   dup = dup = T;                     // test operator=, self-assignment
+//   while(!infile.eof()) {
+//      cout << "Tree Inorder:" << endl << T;             // operator<< does endl
       T.displaySideways();
 
       // test retrieve 
@@ -58,7 +58,7 @@ int main() {
       cout << "Retrieve --> not:  " << (found ? "found":"not found") << endl;
       found = T.retrieve(sssND, p);
       cout << "Retrieve --> sss:  " << (found ? "found":"not found") << endl;
-
+/*
       // test getHeight 
       cout << "Height   --> and:  " << T.getHeight(andND) << endl;
       cout << "Height   --> not:  " << T.getHeight(notND) << endl;
@@ -83,9 +83,9 @@ int main() {
            << endl;
       cout << "Initial data:" << endl << "  ";
       buildTree(T, infile);
-      cout << endl; 
-   }
-
+      cout << endl; */
+ //  }
+   
    return 0;
 }
 

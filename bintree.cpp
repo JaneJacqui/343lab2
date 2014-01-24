@@ -44,8 +44,8 @@ BinTree::BinTree(const BinTree& toCopy) {
 // ~List
 // Overloaded destructor for list class
 BinTree::~BinTree() {
-		// makeEmpty is called to clear the list
-		makeEmpty();
+	// makeEmpty is called to clear the list
+	makeEmpty();
 }
 
 /*/-----------------------------------------------------------------------------
@@ -83,37 +83,14 @@ BinTree& BinTree::operator=(const BinTree& right) {
 	}
 }
 */
-/*/-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // operator==
 // Checks to see if two lists are holding identical objects
 // returns true if they are
-bool BinTree::operator== (const BinTree& right) const {
-	Node* current1 = head;
-	Node* current2 = right.head;
- 
-	// Check to see if both lists are NULL
-	if(current1 == NULL && current2 == NULL) {
-		return true;
-	}
-	// Walks through and compares each object
-	while((current1->next != NULL) && (current2->next != NULL)) {
-		if(*current1->data != *current2->data) {
-			return false;
-		}
-		// move so that next elements in ech list can be compared
-		current1 = current1->next;
-		current2 = current2->next;
-	}
-	if(*current1->data != *current2->data) {
-		return false;
-	}
-	if((current1->next == NULL && current2->next != NULL) || 
-	   (current1->next != NULL && current2->next == NULL)) {
-		return false;
-	} else {
-		// both lists contain the same objects
-		return true;
-	}
+bool BinTree::operator==(const BinTree& toCompare) const
+{
+    return (root == 0 && toCompare.root == 0)
+        || (root != 0 && toCompare.root != 0 && *root == *toCompare.root);
 }
 
 //-----------------------------------------------------------------------------
@@ -127,78 +104,109 @@ bool BinTree::operator!= (const BinTree& right) const {
 		return true;
 	}
 } 
-*/
+
 //-----------------------------------------------------------------------------
 // insert 
 // insert an item into list; operator< of the T class
 // has the responsibility for the sorting criteria
 bool BinTree::insert(NodeData* dataptr) {
-   
-	Node* ptr = new Node;     // exception is thrown if memory is not allocated
-   ptr->data = dataptr;
-   dataptr = NULL;
-   ptr->left = ptr->right = NULL;
-   if (isEmpty()) {
-      root = ptr;
-   }
-   else {
-      Node* current = root;
-      bool inserted = false;
 
-      // if item is less than current item, insert in left subtree,
-      // otherwise insert in right subtree
-      while (!inserted) {
-         if (*ptr->data < *current->data) {
-            if (current->left == NULL) {              // at leaf, insert left
-               current->left = ptr;
-               inserted = true;
-            }
-            else
-               current = current->left;               // one step left
-         }
-         else {
-            if (current->right == NULL) {             // at leaf, insert right
-               current->right = ptr;
-               inserted = true;
-            }
-            else
-               current = current->right;              // one step right
-         }
-      }
-   }
-   return true;
+	// allocate memory for new Node to be added
+	Node* ptr = new Node;
+	ptr->data = dataptr;
+	dataptr = NULL;
+	ptr->left = ptr->right = NULL;
+
+	// in empty list, inserted item becomes root
+	if (isEmpty()) {
+		root = ptr;
+	} else {
+		Node* current = root;		// branch walking variable
+		bool inserted = false;		// traversal loop condition
+
+		while (!inserted) {
+			// compare new item to each node to determine branch path
+			if (*ptr->data < *current->data) {
+				if (current->left == NULL) {
+					current->left = ptr;
+					inserted = true;
+				} else
+					current = current->left;
+			} else if (*ptr->data > *current->data) {
+				if (current->right == NULL) {
+					current->right = ptr;
+					inserted = true;
+				}
+				else
+					current = current->right;
+			} else {
+				// if item is a duplicate, deallocate the memory reserved
+				// and return that the item was not inserted
+				delete ptr;
+				ptr = NULL;
+				return false;
+			}
+		}
+	}
+	return true;
+}
+/*
+//------------------------------------------------------------------------------
+// operator<<
+ostream& operator<<(ostream& output, BinTree& toPrint) {
+	toPrint.dumpInorder(output);
+	return output;
 }
 
-/*/-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// outputHelper
+ostream& dumpInorder(ostream& output) {
+	return outputHelper(output);
+}
+
+ostream& outputHelper(ostream& output, Node* root) {
+
+}
+*/
+
+//-----------------------------------------------------------------------------
 // retrieve
 // Looks for the first parameter in the list and if it's there sets the second
 // parameter to the object. returns true if toRetrieve is found.
 bool BinTree::retrieve(const NodeData toRetrieve, NodeData*& toSet) const {
-	Node* prev = head;
-	// Head case check
+
+	// the value cannot be found in an empty list
 	if (isEmpty()) {
-		toSet = NULL;
 		return false;
-	} else if (*prev->data == toRetrieve) {
-		toSet = prev->data;
-		return true;
-	}
-	Node* current = head->next;
-	// Walks through the list to see if it finds the first parameter
-	while ((current != NULL) && (*prev->data != toRetrieve)) {
-		prev = current;
-		current = current->next;
-	}
-	if (*prev->data == toRetrieve) {
-		toSet = prev->data;
-		return true;
 	} else {
-		toSet = NULL;
+
+		Node* current = root;		// branch walking variable
+		bool found = false;			// traversal loop condition
+
+		while (!found) {
+			// compare the passed item to each node to navigate path
+			if (toRetrieve < *current->data) {
+				// item not found if it isn't right where it should be
+				if (current->left == NULL) {
+					return false;
+				} else
+					current = current->left;
+			} else if (toRetrieve > *current->data) {
+				if (current->right == NULL) {
+					return false;
+				}
+				else
+					current = current->right;
+			} else {
+				// on find, set passed pointer and exit loop
+				toSet = current->data;
+				found = true;
+			}
+		}
 	}
-	// object is not in the list
-	return false;
+	return true;
 }
-*/
+
 //-----------------------------------------------------------------------------
 // isEmpty 
 // check to see if List is empty as defined by a NULL head
@@ -206,24 +214,17 @@ bool BinTree::isEmpty() const {
 	return (root == NULL);
 }
 
-/*/-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // makeEmpty
 // Empties a list by setting it to NULL
 void BinTree::makeEmpty() {
 	if (!isEmpty()) {
-		Node* current = head;
-		// deletes all elements of the list until it reaches the end
-		while (current != NULL){
-			Node* next = current->next;
-			delete current->data;
-			delete current;
-			current = next;
-		}
+		delete root;
 	}
 	// nulls the head pointer 
-	head = NULL;
+	root = NULL;
 }
-*/
+
 //---------------------------------------------------------------------------
 // displaySideways 
 // Displays a binary tree as though you are viewing it from the side;

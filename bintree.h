@@ -20,7 +20,7 @@ using namespace std;
 
 class BinTree { // you add class/method comments and assumptions 
  
-	friend ostream & operator<<(ostream &, const NodeData &);
+	friend ostream& operator<<(ostream &, BinTree &);
 
 public: 
 	BinTree(); // constructor 
@@ -34,7 +34,7 @@ public:
 	bool insert(NodeData*); 
 	bool retrieve(const NodeData, NodeData*&) const; 
 	void displaySideways() const; // provided, displays the tree sideways 
- 
+//	ostream& dumpInorder(ostream&);
 
 private: 
 
@@ -43,9 +43,17 @@ private:
 		Node* left; // left subtree pointer
 		Node* right; // right subtree pointer
 
-		ostream& operator<<(ostream& output) {
-			output << data;
-			return output;
+		friend bool operator==(Node const & lhs, Node const & rhs) {
+			return lhs.data == rhs.data 
+				&& ((lhs.left == 0 && rhs.left == 0)
+				|| (lhs.left != 0 && rhs.left != 0 && *lhs.left == *rhs.left))
+				&& ((lhs.right == 0 && rhs.right == 0)
+				|| (lhs.right != 0 && rhs.right != 0 && *lhs.right == *rhs.right));
+		}
+
+		Node::~Node() {
+			delete left;
+			delete right;
 		}
 
 	}; 
@@ -53,6 +61,7 @@ private:
 	Node* root; // root of the tree 
  
 	// utility functions 
+//	ostream& outputHelper(ostream&, Node*);
 	void inorderHelper() const; 
 	void sideways(Node*, int) const; // provided, helper for displaySideways() 
 
